@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>HSK4 Dorayaki Challenge · 100 Soal</title>
+    <style>
+        /* Tema Doraemon */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Segoe UI', 'PingFang SC', sans-serif;
+        }
+        body {
+            background: #87CEEB; /* langit biru cerah */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .game-container {
+            width: 100%;
+            max-width: 1000px;
+            background: #ffffffdd;
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            border: 8px solid #F8B500; /* kuning khas Doraemon */
+            box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: #0B5394; /* biru tua Doraemon */
+            padding: 20px;
+            text-align: center;
+            border-bottom: 5px solid #F8B500;
+            position: relative;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            color: #FFD966;
+            text-shadow: 3px 3px 0 #B45F06;
+            letter-spacing: 2px;
+        }
+        .header h2 {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+        .doraemon-icon {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            background: #0B5394;
+            border-radius: 50%;
+            border: 4px solid #F8B500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            background: #FFF2CC;
+            padding: 15px 10px;
+            border-bottom: 3px solid #F8B500;
+        }
+        .stat-box {
+            text-align: center;
+            min-width: 70px;
+        }
+        .stat-box h4 {
+            color: #B45F06;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        .stat-box p {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #0B5394;
+        }
+        .timer {
+            color: #FF0000 !important;
+        }
+        .hero-panel {
+            display: flex;
+            padding: 15px;
+            background: #FFE599;
+            border-bottom: 3px solid #F8B500;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .hero-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #0B5394;
+            border: 4px solid #F8B500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .hero-info {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .hero-info span {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 1rem;
+            border: 2px solid #F8B500;
+            color: #0B5394;
+            font-weight: bold;
+        }
+        .section-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 15px 10px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            background: #FFD966;
+            border: 3px solid #F8B500;
+            color: #0B5394;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1.1rem;
+        }
+        .tab.active {
+            background: #F8B500;
+            color: white;
+            border-color: #0B5394;
+        }
+        .progress {
+            height: 12px;
+            background: #CCCCCC;
+            margin: 10px 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #F8B500;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0B5394, #F8B500);
+            width: 0%;
+            transition: 0.3s;
+        }
+        .question-area {
+            padding: 20px;
+            background: #FFF8E7;
+            margin: 15px;
+            border-radius: 30px;
+            border-left: 10px solid #F8B500;
+            border-right: 5px solid #0B5394;
+            min-height: 150px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            color: #0B5394;
+            font-weight: 500;
+            box-shadow: inset 0 0 10px #FFE599;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 15px 20px;
+        }
+        .option {
+            background: #FFD966;
+            border: 3px solid #F8B500;
+            border-radius: 60px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1.1rem;
+            color: #0B5394;
+            font-weight: bold;
+        }
+        .option:hover {
+            transform: scale(1.02);
+            background: #FFE599;
+            border-color: #0B5394;
+        }
+        .option.selected {
+            background: #F8B500;
+            border-color: #0B5394;
+            color: white;
+        }
+        .option.correct {
+            background: #A9D08E;
+            border-color: #2E7D32;
+            color: #1E3A2E;
+        }
+        .option.incorrect {
+            background: #F4B084;
+            border-color: #C00000;
+            color: #8B0000;
+        }
+        .option-letter {
+            width: 45px;
+            height: 45px;
+            background: #0B5394;
+            color: #FFD966;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            border: 2px solid #F8B500;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px 25px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            flex: 1 1 120px;
+            padding: 15px 10px;
+            border: none;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #FFD966;
+            color: #0B5394;
+            border: 3px solid #F8B500;
+        }
+        .btn.primary {
+            background: #0B5394;
+            color: #FFD966;
+            border-color: #F8B500;
+        }
+        .btn.success {
+            background: #A9D08E;
+            color: #1E3A2E;
+            border-color: #2E7D32;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn:not(:disabled):hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 15px #F8B500;
+        }
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+        .modal.hidden {
+            display: none;
+        }
+        .modal-content {
+            background: #FFF8E7;
+            border: 8px solid #F8B500;
+            border-radius: 60px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #0B5394;
+        }
+        .modal-content h2 {
+            color: #F8B500;
+            text-shadow: 2px 2px 0 #0B5394;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2rem;
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 2px dashed #F8B500;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .rank-badge {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #0B5394;
+            margin: 20px 0;
+            text-align: center;
+            background: #FFD966;
+            padding: 15px;
+            border-radius: 60px;
+            border: 4px solid #F8B500;
+        }
+        .result-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #FFE599;
+            border-radius: 30px;
+        }
+        .result-section h3 {
+            color: #B45F06;
+            margin-bottom: 10px;
+        }
+        .pass {
+            color: #2E7D32;
+            font-weight: bold;
+        }
+        .fail {
+            color: #C00000;
+            font-weight: bold;
+        }
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #FFE599;
+            border-radius: 30px;
+        }
+        .review-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FFD966;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 3px solid #F8B500;
+            transition: 0.2s;
+            font-size: 1.2rem;
+            color: #0B5394;
+        }
+        .review-item.correct {
+            background: #A9D08E;
+            border-color: #2E7D32;
+            color: #1E3A2E;
+        }
+        .review-item.incorrect {
+            background: #F4B084;
+            border-color: #C00000;
+            color: #8B0000;
+        }
+        .review-item.unanswered {
+            opacity: 0.6;
+        }
+        .review-item:hover {
+            transform: scale(1.1);
+        }
+        .review-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+        .review-tab {
+            padding: 10px 20px;
+            background: #FFD966;
+            border: 3px solid #F8B500;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #0B5394;
+        }
+        .review-tab.active {
+            background: #F8B500;
+            color: white;
+        }
+        /* Doraemon dekorasi */
+        .doraemon-decor {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 50px;
+            height: 50px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%230B5394"/><circle cx="30" cy="40" r="8" fill="white"/><circle cx="70" cy="40" r="8" fill="white"/><circle cx="35" cy="43" r="3" fill="black"/><circle cx="65" cy="43" r="3" fill="black"/><path d="M30 65 Q50 80, 70 65" stroke="%23F8B500" stroke-width="6" fill="none"/><circle cx="50" cy="70" r="12" fill="%23F8B500"/></svg>');
+            background-size: cover;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <div class="header">
+        <div class="doraemon-icon">🐱</div>
+        <h1>HSK4 Dorayaki</h1>
+        <h2>100 soal · 80 menit</h2>
+    </div>
+    <div class="stats">
+        <div class="stat-box"><h4>Soal</h4><p id="soalCounter">1/100</p></div>
+        <div class="stat-box"><h4>Waktu</h4><p class="timer" id="timerDisplay">80:00</p></div>
+        <div class="stat-box"><h4>Skor</h4><p id="scoreDisplay">0</p></div>
+        <div class="stat-box"><h4>Rank</h4><p id="rankDisplay">Nobi</p></div>
+    </div>
+    <div class="hero-panel">
+        <div class="hero-avatar">🐱</div>
+        <div class="hero-info">
+            <span>❤️ <span id="hpValue">100</span></span>
+            <span>⚔️ <span id="powerValue">45</span></span>
+            <span>🛡️ <span id="defenseValue">60</span></span>
+            <span>⚡ <span id="speedValue">75</span></span>
+        </div>
+    </div>
+    <div class="section-tabs" id="sectionTabs">
+        <div class="tab active" data-section="listening">🎧 听力 (45)</div>
+        <div class="tab" data-section="reading">📖 阅读 (40)</div>
+        <div class="tab" data-section="writing">✍️ 书写 (15)</div>
+    </div>
+    <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="question-area" id="questionText">Memuat soal...</div>
+    <div class="options" id="optionsContainer"></div>
+    <div class="buttons">
+        <button class="btn" id="prevBtn" disabled>← Sebelumnya</button>
+        <button class="btn success" id="submitBtn" disabled>✓ Submit</button>
+        <button class="btn primary" id="nextBtn">Selanjutnya →</button>
+    </div>
+</div>
+
+<!-- Modal Mulai -->
+<div class="modal" id="startModal">
+    <div class="modal-content">
+        <h2>HSK4 Dorayaki</h2>
+        <p>Hai Nobita! Bantu Doraemon selesaikan 100 soal HSK4 dalam 80 menit.</p>
+        <div style="text-align:left; margin:20px 0">
+            <div class="result-row"><span>听力</span><span>45 soal</span></div>
+            <div class="result-row"><span>阅读</span><span>40 soal</span></div>
+            <div class="result-row"><span>书写</span><span>15 soal</span></div>
+        </div>
+        <p style="margin-bottom:20px;">✅ Setiap soal otomatis lanjut setelah submit.</p>
+        <button class="btn primary" id="startBtn" style="width:100%; padding:18px;">MULAI PETUALANGAN</button>
+    </div>
+</div>
+
+<!-- Modal Hasil -->
+<div class="modal hidden" id="resultModal">
+    <div class="modal-content">
+        <h2>HASIL AKHIR</h2>
+        <div class="rank-badge" id="finalRank">Nobi</div>
+        <div class="result-row"><span>Total Skor</span><span id="finalScore">0</span></div>
+        <div class="result-row"><span>Benar</span><span id="finalCorrect">0/100</span></div>
+        <div class="result-row"><span>Persentase</span><span id="finalPercent">0%</span></div>
+        <div class="result-row"><span>Status</span><span id="finalStatus" class="fail">Tidak Lulus</span></div>
+        <div class="result-section">
+            <h3>Rincian per Bagian</h3>
+            <div class="result-row"><span>听力 (45)</span><span id="listeningScore">0/45</span></div>
+            <div class="result-row"><span>阅读 (40)</span><span id="readingScore">0/40</span></div>
+            <div class="result-row"><span>书写 (15)</span><span id="writingScore">0/15</span></div>
+        </div>
+        <button class="btn primary" id="reviewBtn" style="width:100%; margin-top:15px;">📋 Review Jawaban</button>
+        <button class="btn primary" id="restartBtn" style="width:100%; margin-top:15px;">Main Lagi</button>
+    </div>
+</div>
+
+<!-- Modal Review -->
+<div class="modal hidden" id="reviewModal">
+    <div class="modal-content">
+        <h2>Review Jawaban</h2>
+        <div class="review-tabs">
+            <div class="review-tab active" data-section="listening">听力 (45)</div>
+            <div class="review-tab" data-section="reading">阅读 (40)</div>
+            <div class="review-tab" data-section="writing">书写 (15)</div>
+        </div>
+        <div id="reviewGridContainer" class="review-grid"></div>
+        <button class="btn primary" id="closeReviewBtn" style="width:100%; margin-top:20px;">Tutup</button>
+    </div>
+</div>
+
+<script>
+(function() {
+    // ==================== DATA SOAL HSK4 H41221 ====================
+    const soal = {
+        listening: [
+            // 1-10 (True/False)
+            { text: "爱情是照亮生活的阳光，但不应该成为我们生命的全部。<br>★爱情不是生命的全部。", options: ["✓ 对", "✗ 错"], correct: 0 },
+            { text: "世界上没有两个性格完全相同的人，这就像世界上没有完全相同的叶子一样。<br>★人们的性格各不相同。", options: ["✓ 对", "✗ 错"], correct: 0 },
+            { text: "不管做什么事情，提前做计划总是好的。每一步应该做什么、怎么做，不用安排得特别详细，但必须有一个大概的想法。<br>★做计划当然要很详细。", options: ["✓ 对", "✗ 错"], correct: 1 },
+            { text: "麻烦你帮我查一下黄大夫的手机号码，我有事情要找她，但是我现在没有她的电话号码。<br>★他要联系黄大夫。", options: ["✓ 对", "✗ 错"], correct: 0 },
+            { text: "知道你今天回家，儿子一直吵着说要等你回来，怎么也不愿意去睡觉。结果实在太困了，在沙发上就睡着了。<br>★儿子正在写作业。", options: ["✓ 对", "✗ 错"], correct: 1 },
+            { text: "这个会议室太小，座位不够，恐怕得换个大一点儿的，你一会儿去问问旁边那个大会议室星期六有没有人用。<br>★他想找个合适的会议室。", options: ["✓ 对", "✗ 错"], correct: 0 },
+            { text: "别担心，我叔叔是律师，这个问题他应该可以提供一些比较专业的意见，我帮你问问，有消息我就告诉你。<br>★他叔叔是医生。", options: ["✓ 对", "✗ 错"], correct: 1 },
+            { text: "刚刚搬完家，还没来得及收拾，房间里挺乱的，你随便找个地方坐吧，我去给你拿瓶饮料。<br>★房间已经打扫干净了。", options: ["✓ 对", "✗ 错"], correct: 1 },
+            { text: "昨天我在报纸上看见一家杂志社在招聘高级翻译，要硕士，给出的条件还不错，你要不要去试一试？<br>★那家杂志社在招人。", options: ["✓ 对", "✗ 错"], correct: 0 },
+            { text: "今天天气真好，雨停了，太阳出来了，虽然在刮风，但是一点儿也不冷，非常适合去爬山。<br>★今天是阴天。", options: ["✓ 对", "✗ 错"], correct: 1 },
+            // 11-25 pilihan ganda (dari transkrip)
+            { text: "男：我带的钱不够，你能不能先借我一点儿，我明天还你。女：没问题。高老师，您要多少？<br>问：男的在做什么？", options: ["借钱", "卖饼干", "找钥匙", "打印文章"], correct: 0 },
+            { text: "女：这个鸡蛋汤味道怎么样？你尝一下？男：我尝了，稍微有点儿咸，是盐放多了吧？<br>问：他们在谈什么？", options: ["汤", "咖啡", "葡萄酒", "牛奶糖"], correct: 0 },
+            { text: "男：我不想去上钢琴课了。女：为什么？你不是很喜欢弹钢琴吗？而且还弹得那么好。<br>问：男的不想做什么？", options: ["游泳", "画画儿", "上钢琴课", "打羽毛球"], correct: 2 },
+            { text: "女：经理，打扰您一下，我明天要去趟医院，我想请一天假可以吗？男：当然可以，怎么了？身体不舒服？<br>问：女的请假要做什么？", options: ["出差", "爬长城", "去医院", "照顾奶奶"], correct: 2 },
+            { text: "男：你乒乓球打得真不错，有时间能教教我吗？女：没问题。我每周六都会来体育馆，到时候你来找我就行了。<br>问：女的是什么意思？", options: ["最近很忙", "可以教他", "会打网球", "动作不标准"], correct: 1 },
+            { text: "女：明天早上八点半在东门集合，别迟到啊！男：放心吧，我一定准时到。<br>问：女的提醒男的什么？", options: ["寄信", "别迟到", "要仔细", "写总结"], correct: 1 },
+            { text: "男：孙小姐，表格我做好了，您看看有什么问题没。女：刚才忘和你说了，还要再加上一列“性别”。<br>问：女的要求怎么做？", options: ["再加一列", "再算一遍", "减少字数", "继续申请"], correct: 0 },
+            { text: "女：明天中午我们一起出去吃饭吧，我请客。男：啊？抱歉，明天我要去大使馆拿签证，不知道中午能不能回来。<br>问：男的明天要去哪儿？", options: ["药店", "图书馆", "火车站", "大使馆"], correct: 3 },
+            { text: "男：真可惜，这个球差一点点就踢进了。女：是呀，还剩一分钟了，马上就结束了，估计没机会再进球了。<br>问：根据对话，下列哪个正确？", options: ["下雪了", "答案错了", "观众很少", "那个球没进"], correct: 3 },
+            { text: "女：现在流行短发，我也去理个短发，你看怎么样？男：短发？我觉得你还是留长头发好看。<br>问：男的是什么意思？", options: ["别生气", "别理短发", "戴上帽子", "裤子太长"], correct: 1 },
+            { text: "男：校长，您找我？女：是，我这儿有一份材料，麻烦你替我跑一趟，给关教授送过去。<br>问：这份材料要送给谁？", options: ["服务员", "白师傅", "马经理", "关教授"], correct: 3 },
+            { text: "女：窗户很长时间没擦了，太脏了。男：你别管了，先好好休息吧，明天上午我来擦。<br>问：根据对话，下列哪个正确？", options: ["毛巾很脏", "窗户脏了", "伞修好了", "袜子破了"], correct: 1 },
+            { text: "男：喂，我的航班推迟了，我大概要中午一点才能到北京。女：没关系，我去机场接你。<br>问：关于男的，可以知道什么？", options: ["爱开玩笑", "护照丢了", "还没到北京", "没有听广播"], correct: 2 },
+            { text: "女：怎么现在才回来？今天又加班了？男：不是，今天在公司遇到一个大学同学，聊了一会儿，然后跟他一起吃了顿饭。<br>问：男的为什么回来晚了？", options: ["去跳舞了", "弄错地址了", "遇到同学了", "去看演出了"], correct: 2 },
+            { text: "男：姐，这么多照片，都是你这次旅游时照的？女：不全是，有些是以前照的，我打算整理一下。<br>问：关于这些照片，下列哪个正确？", options: ["数量很少", "还没整理", "全是风景照", "都是老照片"], correct: 1 },
+            // 26-45 (dari transkrip)
+            { text: "女：咱们家这个空调太旧了。男：是，制冷效果不太好了。女：那咱们星期六去商店看看，买一台新的？男：行。<br>问：他们打算买什么？", options: ["空调", "冰箱", "家具", "传真机"], correct: 0 },
+            { text: "男：你工作找得怎么样了？女：挺顺利的，已经定下来了。男：太好了！祝贺你！什么时候正式上班？女：七月九号。<br>问：关于女的，可以知道什么？", options: ["是博士", "要去留学", "放暑假了", "找到工作了"], correct: 3 },
+            { text: "女：快放寒假了，你有什么安排？男：我打算去东北玩儿。女：东三省？那儿冬天多冷啊！你怎么会想去那儿玩儿？男：冷是冷，可是那儿冬天也很漂亮。<br>问：女的觉得东北怎么样？", options: ["交通方便", "空气新鲜", "适合购物", "冬天很冷"], correct: 3 },
+            { text: "男：这个盒子好像坏了。女：是吗？那你小心点儿，先放桌上吧。男：这里面是什么啊？女：是几个杯子，是以前邻居家一个阿姨送我的。<br>问：杯子是谁送的？", options: ["亲戚", "邻居", "导游", "记者"], correct: 1 },
+            { text: "女：我们在这儿开个分店怎么样？男：我刚才也在考虑，周围很多写字楼，但没几家饭店。女：估计房租不便宜。男：咱们先了解一下，然后再决定到底要不要开。<br>问：女的觉得这儿怎么样？", options: ["房租贵", "很凉快", "入口太窄", "顾客不多"], correct: 0 },
+            { text: "男：这个笑话确实有意思，你在哪里看到的？女：有一个网站，里面有很多有趣的笑话。男：你把网址发给我，我也去看看。女：好的。<br>问：那个笑话是在哪儿看到的？", options: ["网上", "黑板上", "飞机上", "电梯里"], correct: 0 },
+            { text: "女：你怎么会喜欢看京剧呢？男：小时候，爷爷差不多每个月都带我去看一次京剧。女：京剧的内容大多是历史故事，你能看懂？男：爷爷会一边看一边给我介绍，让我学了很多知识。<br>问：关于男的，可以知道什么？", options: ["不抽烟", "喜欢京剧", "符合条件", "爱好音乐"], correct: 1 },
+            { text: "男：喂？我刚看电视上说今天有大雨，咱们改天再去植物园吧。女：好啊，那明天怎么样？男：明天恐怕也不行，明天是我爸的生日。女：没关系，那我们再约时间。<br>问：他们为什么今天不去植物园了？", options: ["太累了", "天气不好", "来客人了", "男的生病了"], correct: 1 },
+            { text: "女：你看见我的手表没？男：没有，是不是忘在宾馆了？女：不会，肯定没忘在宾馆，我印象里上车的时候还戴着呢。男：那看看在不在你包里，不会丢在出租车上吧？<br>问：女的在找什么？", options: ["手表", "词典", "行李箱", "照相机"], correct: 0 },
+            { text: "男：你怎么了？女：我们本来说明天提前放假的，刚才突然又说有变化，让等通知。男：那就等一等好了，也许一会儿就有好消息了。女：也只好这样了。<br>问：女的现在感觉怎么样？", options: ["兴奋", "失望", "满意", "饿了"], correct: 1 },
+            { text: "两个女人在聊天儿，一个问：“你儿子还好吧？”另一个说：“他很可怜，他妻子太懒，不做饭，不洗衣服，连孩子也不带。”“那女儿呢？”“她生活得很好。”女人笑了：“她找了个好丈夫，家里的事都由她先生做。”<br>36. 那个女人为什么觉得儿子可怜？", options: ["工资低", "缺少力气", "经常感冒", "妻子很懒"], correct: 3 },
+            { text: "37. 关于女儿，可以知道什么？", options: ["结婚了", "很美丽", "是警察", "喜欢做生意"], correct: 0 },
+            { text: "不要总是想着去改变你身边的人，要学会去适应别人。要知道，改变一个人很困难，也不容易被人接受。如果别人总是想改变你，你会高兴吗？相反，如果大家都学会去适应别人，那么生活会更美好，人的心情也会更愉快。<br>38. 如果别人总是想改变你，你会觉得怎么样？", options: ["感动", "得意", "不高兴", "很正常"], correct: 2 },
+            { text: "39. 根据这段话，怎样才能让生活更美好？", options: ["开饭馆儿", "多交朋友", "改变环境", "主动适应别人"], correct: 3 },
+            { text: "努力把事情做到最好，这无疑是对的。不过，当别人请你帮忙时，对那些超出自己能力范围的事情，最好还是先考虑考虑。否则，最后事情没办成，不仅自己觉得丢脸，而且别人有可能不再信任你。<br>40. 别人请你做的事情太难时，你该怎么办？", options: ["道歉", "找人商量", "直接拒绝", "要考虑一下"], correct: 3 },
+            { text: "41. 这段话主要想告诉我们什么？", options: ["别太粗心", "不要激动", "对人要友好", "要学会说“不”"], correct: 3 },
+            { text: "晚饭后，一家人一起出去散散步，是一件很幸福的事情。肚子吃饱了需要活动，家人忙了一天需要交流，夫妻说说一天的工作能加深感情，孩子谈谈学校的趣事能增加了解，在这个过程中，一天的烦恼就都跑掉了。<br>42. 说话人觉得什么事情很幸福？", options: ["身体健康", "和朋友逛街", "与家人散步", "收到邀请信"], correct: 2 },
+            { text: "43. 这段话主要想告诉我们什么？", options: ["别害怕竞争", "要有判断力", "多鼓励孩子", "多与家人交流"], correct: 3 },
+            { text: "人一生中会遇到很多事情，或者愉快，或者伤心，都只能由自己去经历，其他任何人都无法代替。生活是自己在过去，其中的酸、甜、苦、辣也只有自己知道，别人说什么不重要，自己感觉快乐就行了。<br>44. 关于生活，可以知道什么？", options: ["有酸有甜", "非常轻松", "其实很奇怪", "每天都很精彩"], correct: 0 },
+            { text: "45. 这段话主要想告诉我们什么？", options: ["要互相理解", "要关心社会", "要有同情心", "自己快乐就好"], correct: 3 }
+        ],
+        reading: [
+            // 46-50 (选词填空 A镜子 B密码 C篇 D坚持 E陪 F成熟)
+            { text: "和同龄人相比，他看上去更（ ）一些。", options: ["A镜子", "B密码", "C篇", "D坚持", "E陪", "F成熟"], correct: 5 },
+            { text: "他就是这（ ）小说的作者，现在读大学三年级。", options: ["A镜子", "B密码", "C篇", "D坚持", "E陪", "F成熟"], correct: 2 },
+            { text: "怎么办呢？我忘记这张银行卡的（ ）了，你们俩有什么办法？", options: ["A镜子", "B密码", "C篇", "D坚持", "E陪", "F成熟"], correct: 1 },
+            { text: "真正的朋友应该像（ ），能够帮你照见自己的缺点。", options: ["A镜子", "B密码", "C篇", "D坚持", "E陪", "F成熟"], correct: 0 },
+            { text: "有时候，吃完晚饭，爸爸会（ ）着爷爷奶奶去附近的公园走走。", options: ["A镜子", "B密码", "C篇", "D坚持", "E陪", "F成熟"], correct: 4 },
+            // 51-55 (A质量 B最好 C温度 D干 E逛 F厉害)
+            { text: "A：你这双鞋在哪儿买的？看上去（ ）不错。B：我也不知道，我爱人给我买的。", options: ["A质量", "B最好", "C温度", "D干", "E逛", "F厉害"], correct: 0 },
+            { text: "A：妈，您觉得老虎和狮子哪个更（ ）？B：可能是老虎吧。", options: ["A质量", "B最好", "C温度", "D干", "E逛", "F厉害"], correct: 5 },
+            { text: "A：喂，你现在在哪儿呢？B：我和同事在外面（ ）街呢，马上就回去。", options: ["A质量", "B最好", "C温度", "D干", "E逛", "F厉害"], correct: 4 },
+            { text: "A：我们下午5点出发去首都机场来不及吧？B：是，今天正好是周末，可能会堵车，（ ）早点儿出发。", options: ["A质量", "B最好", "C温度", "D干", "E逛", "F厉害"], correct: 1 },
+            { text: "A：你在（ ）什么呢？B：我上网看看，我想换个新的笔记本电脑，你觉得红色的怎么样？", options: ["A质量", "B最好", "C温度", "D干", "E逛", "F厉害"], correct: 3 },
+            // 56-65 (排列顺序, opsi dalam bentuk A B C)
+            { text: "A：每当给小孩子打针时<br>B：王护士经验丰富<br>C：她都会有很多办法引开孩子的注意力<br>Urutan yang benar:", options: ["A B C", "B A C", "C A B"], correct: 1 },
+            { text: "A：直到今天，我们仍然都很注意这一点<br>B：这使得我们养成了节约的习惯<br>C：母亲从小就教育我和弟弟妹妹不要浪费<br>Urutan yang benar:", options: ["A B C", "B A C", "C B A"], correct: 2 },
+            { text: "A：从我们这次的调查结果来看<br>B：课前预习和课后复习是必不可少的<br>C：有近70%的学生认为<br>Urutan yang benar:", options: ["A B C", "A C B", "B A C"], correct: 1 },
+            { text: "A：《将爱情进行到底》，2月14日与您相约<br>B：那么，再来看一场爱情电影吧<br>C：是不是觉得情人节光送巧克力还不够浪漫<br>Urutan yang benar:", options: ["A B C", "B A C", "C B A"], correct: 2 },
+            { text: "A：它不仅能按照人的要求做一些简单的动作<br>B：那只小猴子很聪明<br>C：例如握手、鼓掌等，还会使用一些简单的工具<br>Urutan yang benar:", options: ["A B C", "B A C", "C A B"], correct: 1 },
+            { text: "A：一生当中，我们会遇到许多机会<br>B：但问题是，当它来到你身边时<br>C：你是不是已经做好了准备<br>Urutan yang benar:", options: ["A B C", "B A C", "C A B"], correct: 0 },
+            { text: "A：但我还是一眼就认出了他<br>B：虽然毕业以后我们有20多年没见面了<br>C：因为他的样子几乎没什么变化<br>Urutan yang benar:", options: ["A B C", "B A C", "C A B"], correct: 1 },
+            { text: "A：我哥哥出生在晚上<br>B：所以他的名字叫王月<br>C：那天晚上的月亮又大又圆<br>Urutan yang benar:", options: ["A B C", "A C B", "B A C"], correct: 1 },
+            { text: "A：你从厨房的窗户向外看<br>B：就能看到花园<br>C：还能看到门口的两棵苹果树<br>Urutan yang benar:", options: ["A B C", "B A C", "C A B"], correct: 0 },
+            { text: "A：参加讨论的时候<br>B：另一方面也要认真听别人的意见，理解他人的想法<br>C：一方面要把自己的看法准确地表达出来<br>Urutan yang benar:", options: ["A B C", "A C B", "B A C"], correct: 1 },
+            // 66-85 (pemahaman bacaan)
+            { text: "要想过得快乐，就应该记住该记住的，忘记该忘记的；改变能改变的，接受不能改变的。<br>★这段话主要读什么？", options: ["要有礼貌", "生活态度", "数学最重要", "语言的艺术"], correct: 1 },
+            { text: "人们常说，不管别人说什么，我只相信自己眼睛看见的东西。其实，眼睛也可能会骗人，有时候实际情况并不像我们看见的那样。<br>★这段话告诉我们：", options: ["不能难过", "要多阅读", "眼睛会骗人", "要按时检查身体"], correct: 2 },
+            { text: "感谢支持你的人，也要感谢反对你的人。因为支持的声音能让我们获得前进的信心，而反对的声音可以让我们更清楚地认识到自己的缺点，找到努力的方向。<br>★这段话告诉我们要：", options: ["积累经验", "有怀疑精神", "感谢反对者", "向失败者学习"], correct: 2 },
+            { text: "早上我刚推开办公室的门进去，同事们就大笑起来，小张走上前来告诉我：“你今天穿的衣服比较特别。”我低头看了一眼，才发现原来是我早上急着出门，竟然把衣服穿反了。<br>★他今天：", options: ["要去约会", "被表扬了", "出门很着急", "忘戴眼镜了"], correct: 2 },
+            { text: "《公共汽车、电车车票使用办法》规定：身高不满1.2米的儿童乘车时可以免票。<br>★身高不超过1.2米的儿童坐车时：", options: ["免费", "都很紧张", "车票打折", "不能带食品"], correct: 0 },
+            { text: "人们往往只看见别人成功时获得的鲜花和掌声，却很少去注意别人在取得成功之前流下的汗水。<br>★人们很少注意到：", options: ["自己的优点", "自己的责任", "别人的批评", "别人的努力"], correct: 3 },
+            { text: "海南的气候条件很特别，一年四季都让人感觉暖和、湿润。即使是冬天，你也能看到遍地鲜花，所以海南有“四时常花，长夏无冬”的说法。<br>★海南：", options: ["四季如春", "秋天很长", "没有森林", "空气湿润"], correct: 3 },
+            { text: "很久以前，中国人认为做梦是上天要告诉他们将来会发生的一些事情，因此他们试着对各种梦做出解释。例如一个人梦到很多水，说明他将会有很大一笔收入。后来，他们把这些解释写成了一本书，叫做《周公解梦》。<br>★关于《周公解梦》，可以知道：", options: ["很复杂", "特别无聊", "赚了很多钱", "解释了很多梦"], correct: 3 },
+            { text: "你从前面这个天桥上过去，去对面，然后向右走大约500米，就可以看到那个菜市场。<br>★那个菜市场：", options: ["很有名", "在路对面", "离家很远", "在超市左边"], correct: 1 },
+            { text: "每年有成千上万的高中毕业生报名参加艺术考试，他们中很多人都抱着成为著名演员的理想，但其实大部分考生并不清楚表演究竟是什么。<br>★根据这段话，很多考生：", options: ["年龄很大", "成绩优秀", "不理解表演", "对游戏有兴趣"], correct: 2 },
+            { text: "有经验的司机对当地的道路情况都非常熟悉，他们知道一天的每个时段什么地方可能堵车，提前出发或者少走这些路段，就可以节约很多时间。<br>★根据这段话，经验丰富的司机：", options: ["熟悉路况", "对人热情", "往往很诚实", "开车速度快"], correct: 0 },
+            { text: "随着科学技术的发展，距离对人与人之间交流的影响越来越小了，只要打个电话或者发个电子邮件，就能联系到千里之外的人。<br>★科技发展带来的好处是：", options: ["减少误会", "减少污染", "交流更方便", "增加安全感"], correct: 2 },
+            { text: "年轻有很多好处，而最大的好处是可以不怕失败。因为将来的路还很长，只要不放弃，完全有机会重新再来。<br>★为什么说年轻人可以不怕失败？", options: ["主意多", "很少后悔", "能重新开始", "有父母帮助"], correct: 2 },
+            { text: "中国人常说：“友谊第一，比赛第二。”很多时候，在比赛中输赢不是最重要的，增进友谊才是主要目的。<br>★怎样理解“友谊第一，比赛第二”？", options: ["要变得勇敢", "赢才是关键", "友谊更重要", "要重视方法"], correct: 2 },
+            { text: "我们小时候都听过美人鱼的故事。其实真正的海底世界比故事里写的还要有趣。科学研究发现，海洋底部看起来非常安静，然而却不是一点儿声音也没有，海底的动物们一直在“说话”，只不过人的耳朵是听不到的。另外，海底也不是黑暗的，许多鱼会发出各种颜色的亮光，像一个个流动的灯，美极了。<br>★说话人认为海底世界怎么样？", options: ["很有趣", "十分危险", "没有水草", "需要保护"], correct: 0 },
+            { text: "★研究发现，许多生活在海底的鱼：", options: ["很孤单", "会发光", "喜欢热闹", "极其聪明"], correct: 1 },
+            { text: "他向她求婚时,只说了三个字:“相信我。”她生下女儿的时候,他对她说:“辛苦了。”女儿结婚那天,他对她说:“还有我。”他收到她病危通知的那天,不停地对她说:“我在这儿。”她要走的那一刻,他在她耳边轻声说:“你等我。”这一生,他没对她说过一次“我爱你”,但爱,从来没有离开过。<br>根据“病危通知”,可以知道他妻子:", options: ["已经醒了", "脾气很大", "被人骗了", "病得很严重"], correct: 3 },
+            { text: "这段话主要讲什么?", options: ["什么是爱", "民族特点", "要原谅别人", "要经常说谢谢"], correct: 0 },
+            { text: "永远不要小看一个减肥成功的女人,因为这说明她有着一般人不能比的耐心,可以拒绝常人不能拒绝的美食。一个减肥的女人,必须限制进食,坚持锻炼,拒绝一切能让自己长胖的美味和热量。她如果把这种耐心用在情场和职场上,一定会获得很大的成功。<br>减肥需要拒绝什么?", options: ["运动", "美食", "压力", "睡懒觉"], correct: 1 },
+            { text: "根据这段话,成功减肥的女人:", options: ["个子矮", "不冷静", "值得尊重", "喜欢打扮"], correct: 2 }
+        ],
+        writing: [
+            // 86-95 (完成句子)
+            { text: "将下列词语组成正确的句子：<br><strong>我们 完成任务 保证 按时</strong>", options: ["我们保证按时完成任务。", "我们按时保证完成任务。", "保证我们按时完成任务。", "完成任务我们按时保证。"], correct: 0 },
+            { text: "将下列词语组成正确的句子：<br><strong>欢迎 那个 法律节目 很 受</strong>", options: ["那个法律节目很受欢迎。", "很受欢迎那个法律节目。", "欢迎那个法律节目很受。", "受很欢迎那个法律节目。"], correct: 0 },
+            { text: "将下列词语组成正确的句子：<br><strong>真 及时 下得 这场雨</strong>", options: ["这场雨下得真及时！", "真及时下得这场雨！", "下得真及时这场雨！", "及时真下得这场雨！"], correct: 0 },
+            { text: "将下列词语组成正确的句子：<br><strong>翻译 得 不对 这个句子</strong>", options: ["这个句子翻译得不对。", "翻译这个句子得不对。", "不对这个句子翻译得。", "得不对翻译这个句子。"], correct: 0 },
+            { text: "将下列词语组成正确的句子：<br><strong>每个人 别人的尊重 都 希望获得</strong>", options: ["每个人都希望获得别人的尊重。", "希望获得别人的尊重每个人。", "别人的尊重每个人都希望获得。", "获得别人的尊重每个人希望。"], correct: 0 },
+            { text: "将下列词语组成正确的句子：<br><strong>饮料 火车上 不提供 免费的</strong>", options: ["火车上不提供免费的饮料。", "免费的饮料火车上不提供。", "不提供免费的饮料火车上。", "饮料火车上免费的不提供。"], correct: 0 },
+            { text: "将下列词语组成正确的句子：<br><strong>弄脏了 她 把 裙子</strong>", options: ["她把裙子弄脏了。", "裙子把她弄脏了。", "弄脏了她把裙子。", "把裙子她弄脏了。"], correct: 0 },
+            { text: "将下列词语组成正确的句子：<br><strong>地球是 共同的 家 我们</strong>", options: ["地球是我们共同的家。", "我们共同的家是地球。", "共同的家地球是我们。", "家是我们共同的地球。"], correct: 0 },
+            { text: "将下列词语组成正确的句子：<br><strong>这个消息 大吃一惊 让 都 所有人</strong>", options: ["这个消息让所有人都大吃一惊。", "所有人都让这个消息大吃一惊。", "大吃一惊让所有人都这个消息。", "让所有人都大吃一惊这个消息。"], correct: 0 },
+            { text: "将下列词语组成正确的句子：<br><strong>提高 表达能力 坚持写日记 对 有好处</strong>", options: ["坚持写日记对提高表达能力有好处。", "对提高表达能力坚持写日记有好处。", "有好处坚持写日记对提高表达能力。", "表达能力提高对坚持写日记有好处。"], correct: 0 },
+            // 96-100 (看图造句)
+            { text: "看图，用“起飞”造句：", options: ["飞机已经起飞了。", "起飞时间到了。", "鸟儿起飞了。", "飞机正在起飞。"], correct: 0 },
+            { text: "看图，用“香”造句：", options: ["这些花好香啊！", "饭菜很香。", "香水味道香。", "香喷喷的蛋糕。"], correct: 0 },
+            { text: "看图，用“公里”造句：", options: ["他每天早上都要跑两公里。", "一公里等于一千米。", "距离这里五公里。", "每小时跑十公里。"], correct: 0 },
+            { text: "看图，用“躺”造句：", options: ["躺着看书对眼睛不好。", "他躺在床上。", "小猫躺着晒太阳。", "躺下休息一会儿。"], correct: 0 },
+            { text: "看图，用“讨论”造句：", options: ["她们在讨论明天的事情。", "讨论问题要耐心。", "课堂讨论很热烈。", "我们讨论了一下。"], correct: 0 }
+        ]
+    };
+
+    // ========== STATE ==========
+    let currentSection = 'listening';
+    let currentIdx = 0;
+    let score = 0;
+    let hp = 100;
+    let timeLeft = 80 * 60; // 80 menit
+    let timerInterval = null;
+    let userAnswers = {};
+    let submitted = {};
+    let correctPerSection = { listening: 0, reading: 0, writing: 0 };
+
+    for (let s in soal) {
+        userAnswers[s] = {};
+        submitted[s] = {};
+        for (let i = 0; i < soal[s].length; i++) {
+            userAnswers[s][i] = null;
+            submitted[s][i] = false;
+        }
+    }
+
+    // ========== DOM ==========
+    const startModal = document.getElementById('startModal');
+    const resultModal = document.getElementById('resultModal');
+    const reviewModal = document.getElementById('reviewModal');
+    const startBtn = document.getElementById('startBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const reviewBtn = document.getElementById('reviewBtn');
+    const closeReviewBtn = document.getElementById('closeReviewBtn');
+    const soalCounter = document.getElementById('soalCounter');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const rankDisplay = document.getElementById('rankDisplay');
+    const hpValue = document.getElementById('hpValue');
+    const powerValue = document.getElementById('powerValue');
+    const defenseValue = document.getElementById('defenseValue');
+    const speedValue = document.getElementById('speedValue');
+    const progressFill = document.getElementById('progressFill');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const tabs = document.querySelectorAll('.tab');
+    const reviewTabs = document.querySelectorAll('.review-tab');
+    const reviewGridContainer = document.getElementById('reviewGridContainer');
+
+    function formatTime(seconds) {
+        let m = Math.floor(seconds / 60);
+        let s = seconds % 60;
+        return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    }
+
+    function updateTimerDisplay() {
+        timerDisplay.textContent = formatTime(timeLeft);
+    }
+
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+            if (timeLeft <= 0) endGame();
+        }, 1000);
+    }
+
+    function updateHeroStats() {
+        hpValue.textContent = hp;
+        powerValue.textContent = Math.min(99, 45 + Math.floor(score/20));
+        defenseValue.textContent = Math.min(99, 60 + Math.floor((correctPerSection.listening+correctPerSection.reading+correctPerSection.writing)/5));
+        speedValue.textContent = Math.min(99, 75 + Math.floor((timeLeft/(80*60))*20));
+    }
+
+    function updateRank() {
+        if (score >= 800) rankDisplay.textContent = 'Doraemon';
+        else if (score >= 600) rankDisplay.textContent = 'Nobi';
+        else if (score >= 400) rankDisplay.textContent = 'Shizuka';
+        else if (score >= 200) rankDisplay.textContent = 'Giant';
+        else rankDisplay.textContent = 'Suneo';
+    }
+
+    function updateDisplay() {
+        let answered = 0;
+        for (let s in submitted) {
+            for (let i in submitted[s]) if (submitted[s][i]) answered++;
+        }
+        const totalSoal = 100;
+        progressFill.style.width = (answered / totalSoal * 100) + '%';
+
+        let globalNum = 0;
+        if (currentSection === 'listening') globalNum = currentIdx + 1;
+        else if (currentSection === 'reading') globalNum = soal.listening.length + currentIdx + 1;
+        else globalNum = soal.listening.length + soal.reading.length + currentIdx + 1;
+        soalCounter.textContent = globalNum + '/100';
+
+        scoreDisplay.textContent = score;
+        updateRank();
+        updateHeroStats();
+    }
+
+    function loadQuestion() {
+        const q = soal[currentSection][currentIdx];
+        questionText.innerHTML = q.text;
+        optionsContainer.innerHTML = '';
+        q.options.forEach((opt, i) => {
+            let div = document.createElement('div');
+            div.className = 'option';
+            if (userAnswers[currentSection][currentIdx] === i) div.classList.add('selected');
+            div.innerHTML = `<div class="option-letter">${String.fromCharCode(65+i)}</div><div class="option-text">${opt}</div>`;
+            div.onclick = () => selectOption(i);
+            optionsContainer.appendChild(div);
+        });
+
+        if (submitted[currentSection][currentIdx]) {
+            showFeedback();
+            disableOptions(true);
+            submitBtn.disabled = true;
+        } else {
+            disableOptions(false);
+            submitBtn.disabled = (userAnswers[currentSection][currentIdx] === null);
+        }
+
+        prevBtn.disabled = (currentIdx === 0 && currentSection === 'listening');
+    }
+
+    function selectOption(idx) {
+        if (submitted[currentSection][currentIdx]) return;
+        document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+        document.querySelectorAll('.option')[idx]?.classList.add('selected');
+        userAnswers[currentSection][currentIdx] = idx;
+        submitBtn.disabled = false;
+    }
+
+    function showFeedback() {
+        const q = soal[currentSection][currentIdx];
+        const selected = userAnswers[currentSection][currentIdx];
+        const opts = document.querySelectorAll('.option');
+        opts.forEach((opt, i) => {
+            opt.classList.remove('correct', 'incorrect');
+            if (i === q.correct) opt.classList.add('correct');
+            if (i === selected && i !== q.correct) opt.classList.add('incorrect');
+        });
+    }
+
+    function disableOptions(disabled) {
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.style.pointerEvents = disabled ? 'none' : 'auto';
+        });
+    }
+
+    function submitAnswer() {
+        if (submitted[currentSection][currentIdx]) return;
+        const selected = userAnswers[currentSection][currentIdx];
+        if (selected === null) {
+            alert('Pilih jawaban dulu!');
+            return;
+        }
+        submitted[currentSection][currentIdx] = true;
+        const q = soal[currentSection][currentIdx];
+        if (selected === q.correct) {
+            score += 10;
+            correctPerSection[currentSection]++;
+            hp = Math.min(100, hp + 5);
+        } else {
+            hp = Math.max(0, hp - 10);
+        }
+        showFeedback();
+        disableOptions(true);
+        submitBtn.disabled = true;
+        updateDisplay();
+
+        setTimeout(() => {
+            nextQuestion();
+        }, 1000);
+    }
+
+    function nextQuestion() {
+        const arr = soal[currentSection];
+        if (currentIdx < arr.length - 1) {
+            currentIdx++;
+            loadQuestion();
+            updateDisplay();
+        } else {
+            if (currentSection === 'listening') changeSection('reading');
+            else if (currentSection === 'reading') changeSection('writing');
+            else endGame();
+        }
+    }
+
+    function previousQuestion() {
+        if (currentIdx > 0) {
+            currentIdx--;
+            loadQuestion();
+            updateDisplay();
+        } else {
+            if (currentSection === 'reading') changeSection('listening', true);
+            else if (currentSection === 'writing') changeSection('reading', true);
+        }
+    }
+
+    function changeSection(section, setLast = false) {
+        currentSection = section;
+        currentIdx = 0;
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.dataset.section === section) tab.classList.add('active');
+        });
+        loadQuestion();
+        updateDisplay();
+    }
+
+    function endGame() {
+        clearInterval(timerInterval);
+        const total = 100;
+        const totalBenar = correctPerSection.listening + correctPerSection.reading + correctPerSection.writing;
+        const persen = (totalBenar / total * 100).toFixed(1);
+        const lulus = totalBenar >= 85;
+
+        document.getElementById('finalScore').textContent = score;
+        document.getElementById('finalCorrect').textContent = totalBenar + '/' + total;
+        document.getElementById('finalPercent').textContent = persen + '%';
+        document.getElementById('finalStatus').textContent = lulus ? 'LULUS' : 'TIDAK LULUS';
+        document.getElementById('finalStatus').className = lulus ? 'pass' : 'fail';
+        
+        document.getElementById('listeningScore').textContent = correctPerSection.listening + '/45';
+        document.getElementById('readingScore').textContent = correctPerSection.reading + '/40';
+        document.getElementById('writingScore').textContent = correctPerSection.writing + '/15';
+
+        let rank = 'Nobi';
+        if (score >= 800) rank = 'Doraemon';
+        else if (score >= 600) rank = 'Nobi';
+        else if (score >= 400) rank = 'Shizuka';
+        else if (score >= 200) rank = 'Giant';
+        else rank = 'Suneo';
+        document.getElementById('finalRank').textContent = rank;
+
+        resultModal.classList.remove('hidden');
+    }
+
+    function restartGame() {
+        currentSection = 'listening';
+        currentIdx = 0;
+        score = 0;
+        hp = 100;
+        timeLeft = 80 * 60;
+        correctPerSection = { listening: 0, reading: 0, writing: 0 };
+        for (let s in soal) {
+            userAnswers[s] = {};
+            submitted[s] = {};
+            for (let i = 0; i < soal[s].length; i++) {
+                userAnswers[s][i] = null;
+                submitted[s][i] = false;
+            }
+        }
+        resultModal.classList.add('hidden');
+        reviewModal.classList.add('hidden');
+        changeSection('listening');
+        updateTimerDisplay();
+        startTimer();
+    }
+
+    // ========== REVIEW ==========
+    function showReview(section) {
+        reviewGridContainer.innerHTML = '';
+        const arr = soal[section];
+        for (let i = 0; i < arr.length; i++) {
+            let item = document.createElement('div');
+            item.className = 'review-item';
+            const answered = submitted[section][i];
+            if (!answered) {
+                item.classList.add('unanswered');
+                item.textContent = i+1;
+            } else {
+                const userAns = userAnswers[section][i];
+                const isCorrect = (userAns === arr[i].correct);
+                if (isCorrect) {
+                    item.classList.add('correct');
+                    item.textContent = '✓';
+                } else {
+                    item.classList.add('incorrect');
+                    item.textContent = '✗';
+                }
+            }
+            item.dataset.section = section;
+            item.dataset.index = i;
+            item.onclick = () => {
+                const q = arr[i];
+                const userChoice = userAnswers[section][i];
+                const userAnswerText = (userChoice !== null) ? q.options[userChoice] : 'Tidak dijawab';
+                const correctText = q.options[q.correct];
+                let msg = `Soal ${i+1}\n\n${q.text.replace(/<br>/g, '\n')}\n\nJawaban Anda: ${userAnswerText}\nJawaban Benar: ${correctText}`;
+                alert(msg);
+            };
+            reviewGridContainer.appendChild(item);
+        }
+    }
+
+    reviewBtn.onclick = () => {
+        resultModal.classList.add('hidden');
+        reviewModal.classList.remove('hidden');
+        showReview('listening');
+        reviewTabs.forEach(t => {
+            t.classList.remove('active');
+            if (t.dataset.section === 'listening') t.classList.add('active');
+        });
+    };
+
+    reviewTabs.forEach(tab => {
+        tab.onclick = () => {
+            reviewTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            showReview(tab.dataset.section);
+        };
+    });
+
+    closeReviewBtn.onclick = () => {
+        reviewModal.classList.add('hidden');
+        resultModal.classList.remove('hidden');
+    };
+
+    // ========== CEK REFRESH ==========
+    window.onbeforeunload = function() {
+        return null;
+    };
+
+    // Mencegah copy-paste
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('copy', e => e.preventDefault());
+    document.addEventListener('cut', e => e.preventDefault());
+    document.addEventListener('paste', e => e.preventDefault());
+
+    // ========== EVENT LISTENERS ==========
+    startBtn.onclick = () => {
+        startModal.style.display = 'none';
+        startTimer();
+        loadQuestion();
+        updateDisplay();
+    };
+
+    restartBtn.onclick = restartGame;
+
+    submitBtn.onclick = submitAnswer;
+    nextBtn.onclick = nextQuestion;
+    prevBtn.onclick = previousQuestion;
+
+    tabs.forEach(tab => {
+        tab.onclick = () => {
+            changeSection(tab.dataset.section);
+        };
+    });
+
+    // Tampilkan modal start
+    startModal.style.display = 'flex';
+})();
+</script>
+</body>
+</html>
